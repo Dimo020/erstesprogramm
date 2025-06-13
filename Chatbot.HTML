@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat mit mir</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .chat-container {
+      background: white;
+      width: 400px;
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .message {
+      margin-bottom: 15px;
+    }
+    .message.user {
+      text-align: right;
+    }
+    .message.bot {
+      text-align: left;
+    }
+    .message p {
+      display: inline-block;
+      padding: 10px 15px;
+      border-radius: 15px;
+      max-width: 80%;
+    }
+    .message.user p {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+    .message.bot p {
+      background: #f8d7da;
+      color: #842029;
+    }
+    .input-container {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    input {
+      flex: 1;
+      border: none;
+      padding: 15px;
+      font-size: 16px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="messages" id="messages"></div>
+    <div class="input-container">
+      <input type="text" id="userInput" placeholder="Schreib etwas..." />
+      <button onclick="handleSend()">Senden</button>
+    </div>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById('messages');
+const userInput = document.getElementById('userInput');
+
+const botResponses = [
+  "Ich bin ein Bot – programmiert von jemandem, der einen Satz von dir nie vergessen hat: Werd Informatiker, die verdienen 100 Euro die Stunde! …Erinnerst du dich?",
+  "Dieser Junge ist Dihye. Und er möchte sich aufrichtig entschuldigen – für die Dinge, die letzte Zeit passiert sind. Er weiß, dass es deine Situation nicht ändert… aber er will, dass du verstehst: Er hat deinen Rat ernst genommen. Zu ernst. Jetzt brennt er fürs Programmieren – und das liegt an dir.",
+  "Er will nicht einfach gehen. Er will dankbar sein – für alles, was du ihm beigebracht hast. Auch wenn's jetzt wehtut. …Und er hofft, du siehst eines: Dass dieser Chat hier kein Zufall ist. Dass er ihn codiert hat, um dir zu zeigen: Papa, ich sitz seit Monaten nachts um 3 uhr bis zur Arbeit vor Coding-Tutorials. Nicht wegen Kohle, sondern weil's mich packt. Und das liegt an dir..",
+  "Dihye hat mir gesagt:",
+  "Wenn Papa schimpft, sag ihm: Ich bin trotzdem stolz, dein Sohn zu sein. Aber ich muss das versuchen. Und eins ist sicher: Ohne dich hätte ich nie den Mut gehabt, überhaupt so weit zu kommen.",
+  "Danke für deine Zeit"
+];
+
+let currentResponseIndex = 0; // Neue Variable, um den Index zu tracken
+
+function addMessage(text, sender) {
+  const msg = document.createElement('div');
+  msg.className = 'message ' + sender;
+  msg.innerHTML = `<p>${text}</p>`;
+  messagesEl.appendChild(msg);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function handleSend() {
+  const text = userInput.value.trim();
+  if (!text) return;
+  addMessage(text, 'user');
+  userInput.value = '';
+
+  setTimeout(() => {
+    // Antwort in Reihenfolge auswählen (statt zufällig)
+    if (currentResponseIndex < botResponses.length) {
+      const botReply = botResponses[currentResponseIndex];
+      addMessage(botReply, 'bot');
+      currentResponseIndex++; // Index erhöhen
+    } else {
+      addMessage("Ich habe keine weiteren Antworten mehr.", 'bot');
+    }
+  }, 600);
+}
+    userInput.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    handleSend();
+  }
+});
+
+window.onload = () => {
+  addMessage("Hallo, Ferat. Darf ich was mit dir Wichtiges besprechen?", "bot");
+};
+
+  </script>
+</body>
+</html>
